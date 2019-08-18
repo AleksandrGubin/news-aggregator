@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{app.title}"/>
+</head>
+<body>
+<style>
+    thead, tr:nth-child(even) {
+        background: #f2f2f2;
+    }
+
+    .mainTable .mainTableHeader .mainTableRow {
+        border-collapse: collapse;
+        border-width: 2px;
+        border-style: solid;
+        border-color: #ddd;
+    }
+
+    .mainTableHeader {
+        font-weight: bold;
+        color: white;
+        background: #4caf50;
+    }
+
+    .topRowElement {
+        padding: 5px;
+        float: left;
+        text-align: center;
+    }
+</style>
+<div style="width:100%; height:1px; clear:both;"></div>
+<div>
+    <form name='refreshForm' th:action="@{/refresh}" th:object="${selectedSite}" method='POST'>
+        <div class="topRowElement" th:text="#{lbl.choose.site}"></div>
+        <div class="topRowElement"><select style="width: 200px" th:field="*{value}">
+            <option th:each="site : ${sites}"
+                    th:value="${site.id}"
+                    th:utext="${site.title}"/>
+        </select></div>
+        <div class="topRowElement"><input name="refresh" type="submit" th:value="#{btn.refresh}"/></div>
+    </form>
+    <form name='refreshAllForm' th:action="@{/refreshAll}" method='POST'>
+        <div class="topRowElement"><input name="refreshAll" type="submit" th:value="#{btn.refreshAll}"/></div>
+    </form>
+    <form name="clearDatabaseForm" th:action="@{/clearDB}" method="post">
+        <div class="topRowElement"><input name="clearDB" type="submit" th:value="#{btn.cleardb}"></div>
+    </form>
+    <div class="topRowElement" th:text="#{lbl.newsCount} + ' ' + ${newsCount}"></div>
+    <div style="float: right"><a th:href="@{/}" th:text="#{btn.site.add}">link</a></div>
+</div>
+<div style="width:100%; height:1px; clear:both;"></div>
+<div>
+    <form name='searchForm' th:action="@{/news}" method='GET'>
+        <div class="topRowElement" th:text="#{lbl.search}"/>
+        <div class="topRowElement" style="width: 50%"><input style="width: 100%" type="text" id="q" name="q"
+                                                             th:value="${q}"/></div>
+        <div class="topRowElement"><input type="submit" th:value="#{btn.search}"/></div>
+    </form>
+    <p style="float: right; margin: 0px" th:text="#{lbl.refresh.rate} + ' ' + ${autoupdateCron}"/>
+</div>
+<div style="width:100%; height:1px; clear:both;"></div>
+<table style="width: 100%" class="mainTable">
+    <thead>
+    <th class="mainTableHeader" style="width: 100px" th:text="#{tbl.pubdate}"></th>
+    <th class="mainTableHeader" th:text="#{tbl.title}"></th>
+    <th class="mainTableHeader" th:text="#{tbl.description}"></th>
+    <th class="mainTableHeader" style="width: 100px" th:text="#{tbl.source}"></th>
+    </thead>
+    <tbody>
+    <tr th:each="message : ${news}">
+        <td class="mainTableRow" style="width: 50px"
+            th:text="${#dates.format(message.pubDate, 'dd.MM.yyyy HH:mm:ss')}"></td>
+        <td class="mainTableRow"><a th:href="${message.link}" th:text="${message.title}" target="_blank"/></td>
+        <td class="mainTableRow" th:text="${message.description}"></td>
+        <td class="mainTableRow" th:text="${message.source.title}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

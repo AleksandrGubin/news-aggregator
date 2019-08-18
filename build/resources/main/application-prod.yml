@@ -1,0 +1,28 @@
+spring:
+  security:
+    user:
+      name: tochka
+      password: tochka
+  datasource:
+    url: jdbc:h2:file:./rssdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+
+app:
+  autoupdate-news:
+    cron: 0 */5 * * * ?
+    thread-count: 2
+
+logging:
+  file: logs/app.log
+  level:
+    org.springframework: warn
+    com.gubin.news: warn
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    file: "%d %p %c{1.} [%t] %m%n"

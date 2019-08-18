@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="#{app.title}"/>
+</head>
+<body>
+<style>
+    .error-text {
+        color: red;
+        width: 100%;
+        text-align: right;
+    }
+
+    #addSiteWrapper {
+        padding: 20px;
+        text-align: center;
+    }
+
+    #addSiteDiv {
+        padding: 10px;
+        display: inline-block;
+        width: 400px;
+        text-align: left;
+    }
+</style>
+<div id="addSiteWrapper">
+    <div id="addSiteDiv">
+        <p id="addSiteText" th:text="#{lbl.introduction}"></p>
+        <p th:text="#{lbl.introduction2}">
+        <ul>
+            <li th:text="#{lbl.firstSite}"/>
+            <li th:text="#{lbl.secondSite}"/>
+        </ul>
+        </p>
+        <form id="addSiteForm" name="addSiteForm" th:action="@{/site/add}" th:object="${newSite}" method="POST">
+            <table style="width: 100%">
+                <tr>
+                    <td colspan="2" class="error-text" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+                        errors
+                    </td>
+                </tr>
+                <tr>
+                    <td th:text="#{lbl.site.title}"></td>
+                    <td>
+                        <input style="width: 100%" type="text" th:field="*{title}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="error-text" th:if="${#fields.hasErrors('link')}" th:errors="*{link}">errors
+                    </td>
+                </tr>
+                <tr>
+                    <td th:text="#{lbl.site.url}"></td>
+                    <td>
+                        <input style="width: 100%" type="text" th:field="*{link}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="error-text" th:if="${#fields.hasGlobalErrors()}">
+                        <p style="margin: 0px; " th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center; width:100%"><input
+                            style="display: inline-block; width: 200px; height: 30px" name="submit"
+                            type="submit" th:value="#{btn.site.add}"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <form style="padding-top: 20px; text-align: center" name="gotoNews" th:action="@{/refreshAll}" method="post">
+            <input style="display: inline-block; width: 200px; height: 30px" type="submit" th:value="#{btn.goto.news}"/>
+        </form>
+        <form style="padding-top: 10px; text-align: center" name="clearDatabaseForm" th:action="@{/clearDB}" method="post">
+            <input style="display: inline-block; width: 200px; height: 30px" name="clearDB" type="submit"
+                   th:value="#{btn.cleardb}">
+        </form>
+    </div>
+</div>
+</body>
+</html>
